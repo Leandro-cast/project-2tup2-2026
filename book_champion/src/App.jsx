@@ -1,6 +1,8 @@
-import './App.css'
+import { useState } from 'react';
+import './App.css';
 import NewBook from './components/newBook/NewBook';
 import Books from './components/books/Books';
+
 const booksInitial = [
   {
     id: 1,
@@ -53,15 +55,25 @@ const booksInitial = [
 ];
 
 function App() {
+  const [books, setBooks] = useState(booksInitial);
+
+  const handleBookAdded = (enteredBook) => {
+    const newBook = {
+      ...enteredBook,
+      id: Math.random(),
+    };
+
+    setBooks((prevBooks) => [newBook, ...prevBooks]);
+  };
 
   return (
     <>
       <h1>Book Champions!</h1>
       <h3>Libros!</h3>
-      <NewBook />
-      <Books books={booksInitial} />
+      <NewBook onBookAdded={handleBookAdded} />
+      <Books books={books} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
