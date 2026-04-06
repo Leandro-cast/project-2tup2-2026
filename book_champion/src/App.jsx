@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import NewBook from './components/newBook/NewBook';
 import Books from './components/books/Books';
+import Login from './components/login/Login';
 
 const booksInitial = [
   {
@@ -70,6 +71,7 @@ function App() {
     <>
       <h1>Book Champions!</h1>
       <h3>Libros!</h3>
+      <Login />
       <NewBook onBookAdded={handleBookAdded} />
       <Books books={books} />
     </>
