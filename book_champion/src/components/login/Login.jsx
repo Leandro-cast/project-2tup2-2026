@@ -4,21 +4,38 @@ import { Button, Card, Col, Form, FormGroup, Row } from "react-bootstrap";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errors, setErrors] = useState({ email: false, password: false });
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
     const handleEmailChange = (event) => {
-        setEmail(event.target.value)
-    }
+        setEmail(event.target.value);
+        setErrors({ ...errors, email: false });
+    };
 
     const handlePasswordChange = (event) => {
-        setPassword(event.target.value)
-    }
+        setPassword(event.target.value);
+        setErrors({ ...errors, password: false });
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        alert(`El email ingresado es: ${emailRef.current.value} y el password es ${passwordRef.current.value}`)
-    }
+
+        if (!emailRef.current.value.length) {
+            setErrors({ ...errors, email: true });
+            alert("¡Email vacío!");
+            emailRef.current.focus();
+            return;
+        } else if (!password.length || password.length < 7) {
+            setErrors({ ...errors, password: true });
+            alert("¡Password vacío!");
+            passwordRef.current.focus();
+            return;
+        }
+
+        setErrors({ email: false, password: false });
+        alert(`El email ingresado es: ${email} y el password es ${password}`);
+    };
 
     return (
         <Card className="mt-5 mx-3 p-3 px-5 shadow">
@@ -27,16 +44,23 @@ const Login = () => {
                     <h5>¡Bienvenidos a Books Champion!</h5>
                 </Row>
                 <Form onSubmit={handleSubmit}>
-                    <FormGroup className="mb-4">
+                    <FormGroup className="mb-1">
                         <Form.Control
                             type="email"
                             required
                             placeholder="Ingresar email"
                             onChange={handleEmailChange}
                             ref={emailRef}
-                            value={email} />
+                            value={email}
+                            className={errors.email && "border border-danger"}
+                        />
+                        {errors.email && (
+                            <p className="text-danger mt-1 mb-0">
+                                Debes completar el email para iniciar sesión.
+                            </p>
+                        )}
                     </FormGroup>
-                    <FormGroup className="mb-4">
+                    <FormGroup className="mb-4 mt-3">
                         <Form.Control
                             type="password"
                             required
@@ -44,7 +68,13 @@ const Login = () => {
                             onChange={handlePasswordChange}
                             ref={passwordRef}
                             value={password}
+                            className={errors.password && "border border-danger"}
                         />
+                        {errors.password && (
+                            <p className="text-danger mt-1 mb-0">
+                                Debes completar la contraseña (mínimo 7 caracteres) para iniciar sesión.
+                            </p>
+                        )}
                     </FormGroup>
                     <Row>
                         <Col />
